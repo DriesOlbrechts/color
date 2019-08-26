@@ -1,5 +1,5 @@
-# Quote
-A Powercord plugin that adds a quote button to quickly quote messages next to the add reaction button on each message
+# Color
+Powercord plugin that adds some color information
 
 ### Usage
 `.color [RGB VALUE|HEX VALUE|RGB INT]`
