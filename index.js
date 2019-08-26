@@ -60,13 +60,18 @@ module.exports = class Color extends Plugin {
                 let hexInt = parseInt(args[0])
                 
                 let hex = ''
-                if(hexInt.toString(16).length === 5){
-                 hex = '0' + hexInt.toString(16)
+                
+                if(hexInt.toString(16).length <=5){
+                for(let i =0;i<6-hexInt.toString(16).length;i++){
+                
+                 hex += '0'
+                }
+                hex += hexInt.toString(16)
                 }
                 else if(hexInt.toString(16).length > 5){
                  hex = hexInt.toString(16)
                 }
-                console.log(hex)
+                
                 
                 let rgb = hexToRgb(hex)
                 return {
@@ -110,6 +115,6 @@ module.exports = class Color extends Plugin {
         g: parseInt(result[2], 16).toString(),
         b: parseInt(result[3], 16).toString()
       }
-      console.log(result)
+      
       return result
     }
