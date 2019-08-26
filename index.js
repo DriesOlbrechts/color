@@ -58,7 +58,15 @@ module.exports = class Color extends Plugin {
               }
               else if(!isNaN(args[0])){
                 let hexInt = parseInt(args[0])
-                let hex = '#' + hexInt.toString(16)
+                
+                let hex = ''
+                if(hexInt.toString(16).length === 5){
+                 hex = '0' + hexInt.toString(16)
+                }
+                else if(hexInt.toString(16).length > 5){
+                 hex = hexInt.toString(16)
+                }
+                console.log(hex)
                 
                 let rgb = hexToRgb(hex)
                 return {
@@ -68,7 +76,7 @@ module.exports = class Color extends Plugin {
                     title: 'Info about this color',
                     fields:[ 
                       {name: 'RGB value',value: rgb.r + ',' + rgb.g + ',' + rgb.b,inline:false},
-                      {name: 'hex value',value: hex,inline:false},
+                      {name: 'hex value',value: '#' + hex,inline:false},
                       {name: 'RGB int value',value: args[0],inline:false}
                   
                   ],
