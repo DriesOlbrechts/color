@@ -13,10 +13,9 @@ module.exports = class Color extends Plugin {
               let hexCode = isHex(args[0])
               let rgbCode = isRGB(args[0])
               
-              console.log(hexCode)
-              console.log(rgbCode)
+              
               if(hexCode){
-                console.log('hex')
+                
                 let rgb = hexToRgb(args[0])
                 let rgbInt = parseInt(rgb.b) | (parseInt(rgb.g) << 8) | (parseInt(rgb.r) << 16);
                 rgbInt = rgbInt.toString(10);
@@ -36,7 +35,7 @@ module.exports = class Color extends Plugin {
                   };
               }
               else if(rgbCode){
-                console.log('rgb')
+                
                 let RGBArray = args[0].split(',')
                 let RGB = RGBArray.map(v => parseInt(v))
                 let rgbInt = parseInt(RGB[2]) | (parseInt(RGB[1]) << 8) | (parseInt(RGB[0]) << 16);
@@ -57,6 +56,26 @@ module.exports = class Color extends Plugin {
                     }
                   };
               }
+              else if(!isNaN(args[0])){
+                let hexInt = parseInt(args[0])
+                let hex = '#' + hexInt.toString(16)
+                
+                let rgb = hexToRgb(hex)
+                return {
+                  send: false,
+                  result: {
+                    type: 'rich',
+                    title: 'Info about this color',
+                    fields:[ 
+                      {name: 'RGB value',value: rgb.r + ',' + rgb.g + ',' + rgb.b,inline:false},
+                      {name: 'hex value',value: hex,inline:false},
+                      {name: 'RGB int value',value: args[0],inline:false}
+                  
+                  ],
+                  color: parseInt(hex.replace(/^#/, ''), 16)
+                  }
+                };
+              }
             
             
           }
@@ -75,9 +94,9 @@ module.exports = class Color extends Plugin {
     }
     
     function hexToRgb(hex) {
-      console.log('tot hier')
+      
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      console.log(result)
+      
         result = {
         r: parseInt(result[1], 16).toString(),
         g: parseInt(result[2], 16).toString(),
