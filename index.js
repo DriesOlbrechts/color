@@ -8,8 +8,29 @@ module.exports = class Color extends Plugin {
           'color',
           [],
           'Get information on a color',
-          '{c} [ Color code ]',
+          '{c} [ Color code | random]',
           (args) => {
+
+
+              if(args[0].toLowerCase() === 'random'){
+                let color = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+                let rgb = hexToRgb(color);
+                let rgbInt = parseInt(rgb.b) | (parseInt(rgb.g) << 8) | (parseInt(rgb.r) << 16);
+                return {
+                  send: false,
+                  result: {
+                    type: 'rich',
+                    title: "Here's a random color",
+                    fields: [
+                      { name: "hex", value: color, inline: false },
+                      { name: "rgb", value: hexToRgb(color).r + ',' + hexToRgb(color).g + ',' + hexToRgb(color).b, inline: false },
+                      {name: 'RGB int',value: rgbInt.toString(10),inline:false}
+                  ],
+                  color: parseInt("0x" + (color.slice(1)))
+                    
+                  }
+                };
+              }
               let hexCode = isHex(args[0])
               let rgbCode = isRGB(args[0])
               
@@ -19,20 +40,7 @@ module.exports = class Color extends Plugin {
                 let rgb = hexToRgb(args[0])
                 let rgbInt = parseInt(rgb.b) | (parseInt(rgb.g) << 8) | (parseInt(rgb.r) << 16);
                 rgbInt = rgbInt.toString(10);
-                return {
-                    send: false,
-                    result: {
-                      type: 'rich',
-                      title: 'Info about this color',
-                      fields:[ 
-                        {name: 'RGB value',value: rgb.r + ',' + rgb.g + ',' + rgb.b,inline:false},
-                        {name: 'hex value',value: args[0],inline:false},
-                        {name: 'RGB int value',value: rgbInt,inline:false}
-                    
-                    ],
-                    color: parseInt(args[0].replace(/^#/, ''), 16)
-                    }
-                  };
+                color = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
               }
               else if(rgbCode){
                 
