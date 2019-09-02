@@ -13,8 +13,27 @@ module.exports = class Color extends Plugin {
 
 
               if(args[0].toLowerCase() === 'random'){
-                let color = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
-                let rgb = hexToRgb(color);
+                let color = (Math.random() * 0xFFFFFFF).toString(16).split('.')[1]
+                
+                let hex = '#'
+                if(color.length <=5){
+                  for(let i =0;i<6-color.length;i++){
+                  
+                   hex += '0'
+                  }
+                  hex += color.toString(16)
+                  }
+                  else if(color.length > 5){
+                    if(color.length > 6){
+                      color = color.slice(-6)
+                    }
+                   hex = color.toString(16)
+                  }
+                  hex = hex.toString(16)
+                
+                
+                  
+                let rgb = hexToRgb(hex);
                 let rgbInt = parseInt(rgb.b) | (parseInt(rgb.g) << 8) | (parseInt(rgb.r) << 16);
                 return {
                   send: false,
@@ -22,11 +41,11 @@ module.exports = class Color extends Plugin {
                     type: 'rich',
                     title: "Here's a random color",
                     fields: [
-                      { name: "hex", value: color, inline: false },
-                      { name: "rgb", value: hexToRgb(color).r + ',' + hexToRgb(color).g + ',' + hexToRgb(color).b, inline: false },
+                      {name: 'RGB', value: `${rgb.r},${rgb.g},${rgb.b}`,inline:false},
+                      { name: "hex", value: '#'+hex,inline: false },
                       {name: 'RGB int',value: rgbInt.toString(10),inline:false}
                   ],
-                  color: parseInt("0x" + (color.slice(1)))
+                  color: parseInt(hex.replace(/^#/,''),16)
                     
                   }
                 };
@@ -40,7 +59,20 @@ module.exports = class Color extends Plugin {
                 let rgb = hexToRgb(args[0])
                 let rgbInt = parseInt(rgb.b) | (parseInt(rgb.g) << 8) | (parseInt(rgb.r) << 16);
                 rgbInt = rgbInt.toString(10);
-                color = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+                return {
+                  send: false,
+                  result: {
+                    type: 'rich',
+                    title: 'Info about this color',
+                    fields:[ 
+                      {name: 'RGB value',value: rgb.r + ',' + rgb.g + ',' + rgb.b,inline:false},
+                      {name: 'hex value',value: args[0],inline:false},
+                      {name: 'RGB int value',value: rgbInt,inline:false}
+                  
+                  ],
+                  color: parseInt(args[0].replace(/^#/, ''), 16)
+                  }
+                };
               }
               else if(rgbCode){
                 
@@ -116,7 +148,7 @@ module.exports = class Color extends Plugin {
     
     function hexToRgb(hex) {
       
-      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
       
         result = {
         r: parseInt(result[1], 16).toString(),
